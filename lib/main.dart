@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,109 +8,190 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: IbmApp(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class IbmApp extends StatefulWidget {
+  const IbmApp({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _IbmAppState createState() => _IbmAppState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
+class _IbmAppState extends State<IbmApp> {
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Align(
+          child: Text(
+            'IBM App',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          alignment: Alignment.center,
+        ),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                obscureText: false,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  labelText: 'Name',
+                  hintText: 'Name',
+                ),
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: RadionBtnChecked(),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                obscureText: false,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  labelText: 'Age',
+                  hintText: 'Age',
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                obscureText: false,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  labelText: 'Chiều Cao',
+                  hintText: 'Chiều Cao (CM)',
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                obscureText: false,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  labelText: 'Cân Nặng',
+                  hintText: 'Cân Nặng (KG)',
+                ),
+              ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+enum BestChecked { boy, girl }
+
+class RadionBtnChecked extends StatefulWidget {
+  const RadionBtnChecked({Key? key}) : super(key: key);
+
+  @override
+  _RadionBtnCheckedState createState() => _RadionBtnCheckedState();
+}
+
+class _RadionBtnCheckedState extends State<RadionBtnChecked> {
+  // ignore: unused_field
+  int _radioValue1 = -1;
+  _myFunction(int value) {
+    setState(() {
+      _radioValue1 = value;
+
+      switch (_radioValue1) {
+        case 1:
+          Fluttertoast.showToast(
+              msg: 'Correct !', toastLength: Toast.LENGTH_SHORT);
+          break;
+        case 2:
+          Fluttertoast.showToast(msg: 'Try again !',toastLength: Toast.LENGTH_SHORT);
+          break;
+        default:
+      }
+    });
+  }
+  //=> print("Being pressed!");
+
+  // ignore: unused_element
+  /*dynamic _handleRadioValueChange1() {
+    int value;
+    setState(() {
+      int _radioValue1 = value;
+
+      switch (_radioValue1) {
+        case 1:
+          Fluttertoast.showToast(
+              msg: 'Correct !', toastLength: Toast.LENGTH_SHORT);
+          break;
+        case 2:
+          Fluttertoast.showToast(
+              msg: 'Try again !', toastLength: Toast.LENGTH_SHORT);
+          break;
+      }
+    });
+  }*/
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const Text(
+          'You are :',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18.0,
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Radio(
+                value: 1,
+                groupValue: _radioValue1,
+                onChanged: _myFunction(_radioValue1)),
+            const Text(
+              'Boy',
+              style: TextStyle(fontSize: 16),
+            ),
+            Radio(
+                value: 2,
+                groupValue: _radioValue1,
+                onChanged: _myFunction(_radioValue1)),
+            const Text(
+              'Girl',
+              style: TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
+        const Divider(
+          height: 5,
+          color: Colors.black,
+        ),
+        const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
+      ],
     );
   }
 }
