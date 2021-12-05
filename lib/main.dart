@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,173 +24,217 @@ class IbmApp extends StatefulWidget {
 }
 
 class _IbmAppState extends State<IbmApp> {
+  //custom radio Button
+  int currentindex = 0;
+  String result = "";
+
+  //custom inputCtroller
+  TextEditingController heightController = TextEditingController();
+  TextEditingController weightController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: const Align(
-          child: Text(
-            'IBM App',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    return Container(
+      child: Scaffold(
+        //first, create Appbar
+        appBar: AppBar(
+          title: Text(
+            "BMI Caculator",
+            style: TextStyle(color: Colors.white),
           ),
-          alignment: Alignment.center,
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                obscureText: false,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  labelText: 'Name',
-                  hintText: 'Name',
-                ),
+          elevation: 0.0,
+          backgroundColor: Colors.blueAccent,
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.settings,
+                color: Colors.white,
               ),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: RadionBtnChecked(),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                obscureText: false,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  labelText: 'Age',
-                  hintText: 'Age',
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                obscureText: false,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  labelText: 'Chiều Cao',
-                  hintText: 'Chiều Cao (CM)',
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                obscureText: false,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  labelText: 'Cân Nặng',
-                  hintText: 'Cân Nặng (KG)',
-                ),
-              ),
-            ),
+            )
           ],
+        ),
+        //create body
+        //warp inside a SingleScrollChild
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    radioButton("Man", Colors.lightBlue, 0),
+                    radioButton("Woman", Colors.pink, 1),
+                  ],
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                //create input form
+                Text(
+                  "Your Height in CM: ",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                SizedBox(
+                  height: 8.0,
+                ),
+
+                TextField(
+                  keyboardType: TextInputType.number,
+                  textAlign: TextAlign.center,
+                  //custom Controller
+                  controller: heightController,
+                  decoration: InputDecoration(
+                    hintText: "Your height in Cm",
+                    filled: true,
+                    fillColor: Colors.grey.shade200,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+
+                SizedBox(
+                  height: 8.0,
+                ),
+
+                //create countinue
+                Text(
+                  "Your Weight in KG: ",
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                SizedBox(
+                  height: 8.0,
+                ),
+
+                TextField(
+                  keyboardType: TextInputType.number,
+                  textAlign: TextAlign.center,
+                  controller: weightController,
+                  decoration: InputDecoration(
+                    hintText: "Your weight in kg",
+                    filled: true,
+                    fillColor: Colors.grey.shade200,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+
+                SizedBox(
+                  height: 20.0,
+                ),
+
+                //create button
+                Container(
+                  // ignore: deprecated_member_use
+                  width: double.infinity,
+                  height: 40.0,
+                  child: FlatButton(
+                    onPressed: () {
+                      double height = double.parse(heightController.value.text);
+                      double weight = double.parse(weightController.value.text);
+                      caculateBMI(height, weight);
+                    },
+                    color: Colors.blueAccent,
+                    child: Text(
+                      "Caculate",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+
+                SizedBox(
+                  height: 20.0,
+                ),
+
+                Container(
+                  width: double.infinity,
+                  child: Text(
+                    "Your BMI is: ",
+                    textAlign: TextAlign.center,
+                    style:
+                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                  ),
+                ),
+
+                SizedBox(
+                  height: 50.0,
+                ),
+
+                Container(
+                  width: double.infinity,
+                  child: Text(
+                    "$result",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 40.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.redAccent,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
-}
 
-enum BestChecked { boy, girl }
-
-class RadionBtnChecked extends StatefulWidget {
-  const RadionBtnChecked({Key? key}) : super(key: key);
-
-  @override
-  _RadionBtnCheckedState createState() => _RadionBtnCheckedState();
-}
-
-class _RadionBtnCheckedState extends State<RadionBtnChecked> {
-  // ignore: unused_field
-  int _radioValue1 = -1;
-  _myFunction(int value) {
+  void caculateBMI(double height, double weight) {
+    double finalresult = weight / (height * height / 10000);
+    String bmi = finalresult.toStringAsFixed(2);
     setState(() {
-      _radioValue1 = value;
-
-      switch (_radioValue1) {
-        case 1:
-          Fluttertoast.showToast(
-              msg: 'Correct !', toastLength: Toast.LENGTH_SHORT);
-          break;
-        case 2:
-          Fluttertoast.showToast(msg: 'Try again !',toastLength: Toast.LENGTH_SHORT);
-          break;
-        default:
-      }
+      result = bmi;
     });
   }
-  //=> print("Being pressed!");
 
-  // ignore: unused_element
-  /*dynamic _handleRadioValueChange1() {
-    int value;
+  //declare funtion
+  void changeIndex(int index) {
     setState(() {
-      int _radioValue1 = value;
-
-      switch (_radioValue1) {
-        case 1:
-          Fluttertoast.showToast(
-              msg: 'Correct !', toastLength: Toast.LENGTH_SHORT);
-          break;
-        case 2:
-          Fluttertoast.showToast(
-              msg: 'Try again !', toastLength: Toast.LENGTH_SHORT);
-          break;
-      }
+      currentindex = index;
     });
-  }*/
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Text(
-          'You are :',
+  //create a new custom widgets
+  Widget radioButton(String value, Color color, int index) {
+    return Expanded(
+        child: Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12.0),
+      //up height
+      height: 80.0,
+      // ignore: deprecated_member_use
+      child: FlatButton(
+        //this line means if the current index is equalt to the button index then put the color
+        //the main color the we will define otherwise make it grey
+        color: currentindex == index ? color : Colors.grey.shade200,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+        onPressed: () {
+          changeIndex(index);
+        },
+        //apply some modification to the button text color
+        child: Text(
+          value,
           style: TextStyle(
-            fontWeight: FontWeight.bold,
+            color: currentindex == index ? Colors.white : color,
             fontSize: 18.0,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Radio(
-                value: 1,
-                groupValue: _radioValue1,
-                onChanged: _myFunction(_radioValue1)),
-            const Text(
-              'Boy',
-              style: TextStyle(fontSize: 16),
-            ),
-            Radio(
-                value: 2,
-                groupValue: _radioValue1,
-                onChanged: _myFunction(_radioValue1)),
-            const Text(
-              'Girl',
-              style: TextStyle(fontSize: 16),
-            ),
-          ],
-        ),
-        const Divider(
-          height: 5,
-          color: Colors.black,
-        ),
-        const Padding(padding: EdgeInsets.symmetric(horizontal: 8)),
-      ],
-    );
+      ),
+    ));
   }
 }
